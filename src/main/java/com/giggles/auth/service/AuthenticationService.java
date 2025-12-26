@@ -30,16 +30,14 @@ public class AuthenticationService {
     private final UserSessionRepository userSessionRepository;
     private final JwtUtil jwtUtil;
     private final PasswordUtil passwordUtil;
-    private final SqsService sqsService;
     
     @Autowired
     public AuthenticationService(UserRepository userRepository, UserSessionRepository userSessionRepository, JwtUtil jwtUtil,
-                                 PasswordUtil passwordUtil, SqsService sqsService) {
+                                 PasswordUtil passwordUtil) {
         this.userRepository = userRepository;
         this.userSessionRepository = userSessionRepository;
         this.jwtUtil = jwtUtil;
         this.passwordUtil = passwordUtil;
-        this.sqsService = sqsService;
     }
     
     @Transactional
@@ -112,11 +110,6 @@ public class AuthenticationService {
         session.setIpAddress(getClientIpAddress(httpRequest));
         session.setUserAgent(httpRequest.getHeader("User-Agent"));
         userSessionRepository.save(session);
-        
-        // Upload event to SQS
-        sqsService.sendSignupEvent(user.getId(), 
-                user.getPhoneNumber() != null ? user.getPhoneNumber() : user.getEmail(), 
-                user.getRole().name());
         
         log.info("User account created successfully with ID: {}", user.getId());
         

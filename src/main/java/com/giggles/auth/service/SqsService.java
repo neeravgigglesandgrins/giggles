@@ -1,5 +1,9 @@
 package com.giggles.auth.service;
 
+// SQS Service removed - not required for small user base
+// Uncomment if needed in the future
+
+/*
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,4 +53,4 @@ public class SqsService {
         }
     }
 }
-
+*/
