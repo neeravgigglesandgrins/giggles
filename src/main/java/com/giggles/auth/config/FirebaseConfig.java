@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.InputStream;
+import java.util.Objects;
 
 // Firebase configuration disabled - Firebase OTP verification removed
 // @Configuration
@@ -29,7 +30,7 @@ public class FirebaseConfig {
                 FirebaseOptions.Builder builder = FirebaseOptions.builder()
                         .setProjectId(projectId);
                 
-                if (credentialsPath != null && !credentialsPath.isEmpty() && !credentialsPath.equals("classpath:firebase-credentials.json")) {
+                if (Objects.nonNull(credentialsPath) && !credentialsPath.isEmpty() && !Objects.equals(credentialsPath, "classpath:firebase-credentials.json")) {
                     try {
                         InputStream serviceAccount = new ClassPathResource("firebase-credentials.json").getInputStream();
                         GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);

@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -15,22 +16,28 @@ import java.util.List;
 @Table(name = "users")
 public class UserEntity extends BaseEntity {
     
-    @Column(name = "phone_number", unique = true, nullable = false)
+    @Column(name = "name")
+    private String name;
+    
+    @Column(name = "email", unique = true)
+    private String email;
+    
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
     
-    @Column(name = "email")
-    private String email;
+    @Column(name = "address")
+    private String address;
+    
+    @Column(name = "password", nullable = false)
+    private String password;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private UserRole role;
+    private UserRole role = UserRole.USER;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "session_type", nullable = false)
-    private UserSessionType userSessionType = UserSessionType.SINGLE;
-    
-    @Column(name = "is_anonymous", nullable = false)
-    private Boolean isAnonymous = false;
+    private UserSessionType userSessionType = UserSessionType.MULTI;
     
     @Column(name = "login_attempts")
     private Integer loginAttempts = 0;
@@ -41,15 +48,10 @@ public class UserEntity extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserSessionEntity> sessions = new ArrayList<>();
     
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ProfileEntity profile;
-    
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VehicleEntity> vehicles = new ArrayList<>();
-    
     public List<UserSessionEntity> getActiveSessionsEntities() {
         return sessions.stream()
-                .filter(session -> session.getUserSessionStatus().equals(com.giggles.auth.enums.UserSessionStatus.VALID))
+                .filter(session -> Objects.equals(session.getUserSessionStatus(), com.giggles.auth.enums.UserSessionStatus.VALID))
+                .filter(session -> !session.getExpiry().isBefore(java.time.LocalDateTime.now()))
                 .toList();
     }
 }

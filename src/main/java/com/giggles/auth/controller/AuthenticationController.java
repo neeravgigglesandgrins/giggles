@@ -1,9 +1,7 @@
 package com.giggles.auth.controller;
 
-import com.giggles.auth.dto.request.LoginRequest;
 import com.giggles.auth.dto.request.SignUpOrLoginRequest;
-import com.giggles.auth.dto.response.LoginResponse;
-import com.giggles.auth.dto.response.SignUpResponse;
+import com.giggles.auth.dto.response.AuthResponse;
 import com.giggles.auth.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -24,21 +22,12 @@ public class AuthenticationController {
     }
     
     @PostMapping("/signup-or-login")
-    public ResponseEntity<SignUpResponse> signUpOrLogin(
+    public ResponseEntity<AuthResponse> signUpOrLogin(
             @Valid @RequestBody SignUpOrLoginRequest request,
             HttpServletRequest httpRequest) {
-        log.info("Received signup/login request for phone: {}", request.getPhoneNumber());
-        SignUpResponse response = authenticationService.signUpOrLogin(request, httpRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-    
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(
-            @Valid @RequestBody LoginRequest request,
-            HttpServletRequest httpRequest) {
-        log.info("Received login request for phone: {}", request.getPhoneNumber());
-        LoginResponse response = authenticationService.login(request, httpRequest);
-        return ResponseEntity.ok(response);
+        log.info("Received signup/login request. isSignup: {}", request.getIsSignup());
+        AuthResponse response = authenticationService.signUpOrLogin(request, httpRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
 

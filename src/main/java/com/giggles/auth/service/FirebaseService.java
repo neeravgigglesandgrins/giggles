@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
+
 // Firebase verification removed - service kept for future use
 // @Service
 @Slf4j
@@ -24,18 +26,18 @@ public class FirebaseService {
     public boolean validatePhoneNumber(String idToken, String phoneNumber) {
         try {
             FirebaseToken decodedToken = verifyIdToken(idToken);
-            String tokenPhoneNumber = decodedToken.getClaims().get("phone_number") != null 
+            String tokenPhoneNumber = Objects.nonNull(decodedToken.getClaims().get("phone_number"))
                     ? decodedToken.getClaims().get("phone_number").toString() 
                     : null;
             
-            if (tokenPhoneNumber == null) {
+            if (Objects.isNull(tokenPhoneNumber)) {
                 log.warn("Phone number not found in Firebase token");
                 return false;
             }
             
-            boolean matches = tokenPhoneNumber.equals(phoneNumber) || 
-                            tokenPhoneNumber.equals("+" + phoneNumber) ||
-                            ("+" + tokenPhoneNumber).equals(phoneNumber);
+            boolean matches = Objects.equals(tokenPhoneNumber, phoneNumber) || 
+                            Objects.equals(tokenPhoneNumber, "+" + phoneNumber) ||
+                            Objects.equals("+" + tokenPhoneNumber, phoneNumber);
             
             if (!matches) {
                 log.warn("Phone number mismatch. Token: {}, Request: {}", tokenPhoneNumber, phoneNumber);

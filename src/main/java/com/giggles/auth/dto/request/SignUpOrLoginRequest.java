@@ -1,6 +1,5 @@
 package com.giggles.auth.dto.request;
 
-import com.giggles.auth.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -8,17 +7,21 @@ import lombok.Data;
 @Data
 public class SignUpOrLoginRequest {
     
-    @NotBlank(message = "Phone number is required")
-    private String phoneNumber;
+    // Flag to differentiate signup (true) or login (false)
+    @NotNull(message = "isSignup flag is required")
+    private Boolean isSignup;
     
-    // Firebase ID token - optional (Firebase verification removed)
-    private String firebaseIdToken;
-    
-    @NotNull(message = "Role is required")
-    private UserRole role;
+    // For signup: all fields required
+    // For login: phoneNumber/email and password required
+    private String name;
     
     private String email;
     
-    private Boolean isAnonymous = false;
+    private String phoneNumber;
+    
+    private String address;
+    
+    @NotBlank(message = "Password is required")
+    private String password;
 }
 

@@ -22,5 +22,8 @@ public abstract class BaseEntity {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted = false;
 }
 

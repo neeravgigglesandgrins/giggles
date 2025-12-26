@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignUpResponse {
+public class UserDTO {
     
-    private Long userId;
-    private String authToken;
-    private String phoneNumber;
+    private Long id;
+    private String name;
     private String email;
+    private String phoneNumber;
+    private String address;
     private String role;
-    private Boolean isNewAccount;
 }
 
