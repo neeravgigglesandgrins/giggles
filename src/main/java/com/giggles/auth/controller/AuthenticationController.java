@@ -39,6 +39,6 @@ public class AuthenticationController {
         log.info("Received login request for phone: {}", request.getPhoneNumber());
         LoginResponse response = authenticationService.login(request, httpRequest);
         return ResponseEntity.ok(response);
-    }vjhgcvjhg
+    }
 }
 
