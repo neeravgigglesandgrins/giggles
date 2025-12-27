@@ -10,9 +10,7 @@ public class SignUpOrLoginRequest {
     // Flag to differentiate signup (true) or login (false)
     @NotNull(message = "isSignup flag is required")
     private Boolean isSignup;
-    
-    // For signup: all fields required
-    // For login: phoneNumber/email and password required
+
     private String name;
     
     private String email;

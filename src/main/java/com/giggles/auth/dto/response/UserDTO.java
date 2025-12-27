@@ -16,6 +16,6 @@ public class UserDTO {
     private String email;
     private String phoneNumber;
     private String address;
-    private String role;
+    private String role;// user=different set of Api for user   admin=different set of api
 }
 
